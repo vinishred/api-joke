@@ -1,0 +1,31 @@
+{
+  "name": "api-node-js",
+  "version": "1.0.0",
+  "description": "Serveur HTTP pour API REST",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinishred/API_hotel.git"
+  },
+  "keywords": [
+    "server",
+    "http",
+    "rest",
+    "api"
+  ],
+  "author": "Vince Calla",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vinishred/API_hotel/issues"
+  },
+  "homepage": "https://github.com/vinishred/API_hotel#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.9.1",
+    "sequelize": "^6.37.0"
+  }
+}
