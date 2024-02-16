@@ -1,8 +1,14 @@
 // imports du module express
-var express = require("express");
+const express = require("express");
+const bodyParser = require("body-parser");
+const apiRouter = require("./apiRouter").router;
 
 // initialisation du serveur express
-var server = express();
+const server = express();
+
+// Configuration du module body-parser
+server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.json());
 
 // Configuration des routes avec les deux paramètres: req pour request et res pour response
 server.get("/", function (req, res) {
@@ -10,6 +16,9 @@ server.get("/", function (req, res) {
   res.setHeader("Content-Type", "text/html");
   res.status(200).send("<h1>Bonjour et bienvenue sur mon super serveur !</h1>");
 });
+
+// Configuration des routes
+server.use("/api", apiRouter);
 
 // Lancement du serveur sur le port 8080
 server.listen(8080, function () {
