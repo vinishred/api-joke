@@ -48,7 +48,7 @@ module.exports = {
     }
 
     // fonctions en cascade pour enregistrer un nouvel utilisateur
-    asyncAPI.waterfall(
+    asyncLib.waterfall(
       [
         function (done) {
           models.User.findOne({
@@ -196,8 +196,8 @@ module.exports = {
   // Fonction modifier le profil de notre utilisateur
   updateUserProfile: function (req, res) {
     // Getting auth header
-    var headerAuth = req.headers["authorization"];
-    var userId = jwtUtils.getUserId(headerAuth);
+    const headerAuth = req.headers["authorization"];
+    const userId = jwtUtils.getUserId(headerAuth);
 
     // Params
     var bio = req.body.bio;
@@ -220,7 +220,7 @@ module.exports = {
           if (userFound) {
             userFound
               .update({
-                bio: bio ? bio : userFound.bio,
+                bio: bio || userFound.bio,
               })
               .then(function () {
                 done(userFound);
