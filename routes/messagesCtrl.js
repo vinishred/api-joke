@@ -8,7 +8,7 @@ const TITLE_LIMIT = 2;
 const CONTENT_LIMIT = 4;
 const ITEMS_LIMIT = 50;
 
-// Routes
+// Routes pour exporter nos fonctions
 module.exports = {
   createMessage: function (req, res) {
     // Getting auth header

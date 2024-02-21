@@ -10,7 +10,7 @@ const EMAIL_REGEX =
 const PASSWORD_REGEX =
   /^(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/\-])(?=.*\d)(?=.*[A-Z]).{8,50}$/;
 
-// routes
+// Routes pour exporter nos fonctions
 module.exports = {
   register: function (req, res) {
     // Params
