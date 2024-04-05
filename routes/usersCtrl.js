@@ -98,8 +98,12 @@ module.exports = {
       ],
       function (newUser) {
         if (newUser) {
+          // Générer le token et le renvoyer avec la réponse
+          const token = jwtUtils.generateTokenForUser(newUser);
           return res.status(201).json({
             userId: newUser.id,
+            token: token,
+            message: "Inscription réussie.",
           });
         } else {
           return res.status(500).json({
@@ -158,9 +162,12 @@ module.exports = {
       ],
       function (userFound) {
         if (userFound) {
+          // Générer le token et le renvoyer avec la réponse
+          let token = jwtUtils.generateTokenForUser(userFound);
           return res.status(201).json({
             userId: userFound.id,
-            token: jwtUtils.generateTokenForUser(userFound),
+            token: token,
+            message: "Connexion réussie.",
           });
         } else {
           return res.status(500).json({ error: "cannot log on user" });
@@ -200,34 +207,59 @@ module.exports = {
     const userId = jwtUtils.getUserId(headerAuth);
 
     // Params
-    var bio = req.body.bio;
+    const { username, email, password, bio } = req.body;
 
     asyncLib.waterfall(
       [
         function (done) {
           models.User.findOne({
-            attributes: ["id", "bio"],
             where: { id: userId },
           })
-            .then(function (userFound) {
+            .then((userFound) => {
               done(null, userFound);
             })
-            .catch(function (err) {
+            .catch((err) => {
               return res.status(500).json({ error: "unable to verify user" });
             });
         },
         function (userFound, done) {
           if (userFound) {
-            userFound
-              .update({
-                bio: bio || userFound.bio,
-              })
-              .then(function () {
-                done(userFound);
-              })
-              .catch(function (err) {
-                res.status(500).json({ error: "cannot update user" });
+            if (password) {
+              // Hash the new password
+              bcrypt.hash(password, 10, function (err, hashedPassword) {
+                if (err) {
+                  return res
+                    .status(500)
+                    .json({ error: "cannot hash password" });
+                }
+                userFound
+                  .update({
+                    username: username || userFound.username,
+                    email: email || userFound.email,
+                    password: hashedPassword,
+                    bio: bio || userFound.bio,
+                  })
+                  .then(() => {
+                    done(userFound);
+                  })
+                  .catch((err) => {
+                    res.status(500).json({ error: "cannot update user" });
+                  });
               });
+            } else {
+              userFound
+                .update({
+                  username: username || userFound.username,
+                  email: email || userFound.email,
+                  bio: bio || userFound.bio,
+                })
+                .then(() => {
+                  done(userFound);
+                })
+                .catch((err) => {
+                  res.status(500).json({ error: "cannot update user" });
+                });
+            }
           } else {
             res.status(404).json({ error: "user not found" });
           }

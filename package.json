@@ -14,7 +14,9 @@
     "server",
     "http",
     "rest",
-    "api"
+    "api",
+    "nodemon",
+    "start"
   ],
   "author": "Vince Calla",
   "license": "ISC",
